@@ -1,48 +1,125 @@
-League of Legends Win Prediction
-A binary classification project that predicts match win/loss outcomes from individual in-game performance stats using logistic regression in PyTorch.
-Dataset
-CSV file with 1000 match records. Features used:
-kills, deaths, assists, gold_earned, cs, wards_placed, wards_killed, damage_dealt
-Target: win (0 or 1)
-What's Done
-Phase 1 — Baseline Pipeline
+# 🎮 League of Legends — Win Prediction
+A machine learning project to predict match outcomes in **League of Legends** using player performance statistics and **binary classification with PyTorch**.
 
-80/20 train-test split
-Feature normalization via StandardScaler (fit on train only, transform on test)
-Conversion to float32 tensors (PyTorch default)
-Logistic regression model: Linear(8→1) + Sigmoid activation
-BCELoss + SGD optimizer (lr=0.01)
-1000-epoch training loop with loss logged every 100 epochs
-Accuracy evaluation on both train and test sets
+---
 
-Result: ~54% train accuracy, ~49% test accuracy
-Phase 2 — Regularization
+## 📌 Overview
+Winning in League of Legends depends on a complex mix of combat performance, economy, and vision control. This project builds an **end-to-end binary classification pipeline** that predicts:
+- **Win (1)**
+- **Loss (0)**
 
-Added L2 regularization via weight_decay=0.01 in the SGD optimizer
-Re-trained for 1000 epochs
+The project is designed for **educational purposes**, focusing on correct ML practices — data preprocessing, model building, regularization, and iterative improvement.
 
-Result: ~54% train accuracy, ~51% test accuracy — marginal improvement
-Key Takeaways (so far)
+---
 
-Features must be normalized before training
-Scaler must be fit only on training data — applying it separately to test data prevents data leakage
-PyTorch expects float32; StandardScaler outputs float64 by default
-Predicting team outcomes from individual stats has a natural accuracy ceiling for linear models
+## 🎯 Objectives
+- Preprocess and normalize match statistics for model training
+- Build a **logistic regression baseline** using PyTorch
+- Understand **underfitting vs overfitting** through experimentation
+- Apply regularization techniques (L2 via weight decay)
+- Iteratively improve the model with deeper architectures, BatchNorm, and Dropout
+- Evaluate using accuracy and other classification metrics
 
+---
 
-Future Goals
+## 📁 Project Structure
+```
+lol-win-prediction/
+│
+├── data/                  # Dataset (excluded from git)
+├── notebooks/             # Training, evaluation, experimentation
+├── models/                # Saved model checkpoints (excluded)
+├── reports/               # Metrics, plots, confusion matrices
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
 
- Implement mini-batch training using DataLoader
- Add a multi-layer architecture (hidden layers + ReLU) to capture non-linear patterns
- Implement early stopping properly (per-epoch convergence check)
- Experiment with Adam optimizer
- Add precision, recall, F1 score — accuracy alone is insufficient for imbalanced data
- Move training to GPU (CUDA already confirmed available)
+---
 
+## 📊 Dataset
+Match-level player statistics from League of Legends games.
 
-Requirements
+### Features
+| Feature | Description |
+|---|---|
+| `kills` | Number of kills |
+| `deaths` | Number of deaths |
+| `assists` | Number of assists |
+| `gold_earned` | Total gold earned |
+| `cs` | Creep score (minions killed) |
+| `wards_placed` | Vision wards placed |
+| `wards_killed` | Enemy wards destroyed |
+| `damage_dealt` | Total damage dealt to champions |
 
-Python 3.10+
-PyTorch
-scikit-learn
-pandas
+### Target
+| Label | Value |
+|---|---|
+| Win | 1 |
+| Loss | 0 |
+
+⚠️ Dataset is **not included** in this repository due to size constraints.
+
+---
+
+## 🛠️ Tech Stack
+- Python
+- PyTorch
+- Scikit-learn
+- NumPy, Pandas
+- Matplotlib
+
+---
+
+## 🧠 Model Architecture
+
+### Phase 1 — Baseline (Logistic Regression)
+```
+Input(8) → Linear(8→1) → Sigmoid → Output
+```
+- **Loss:** BCELoss
+- **Optimizer:** SGD with L2 regularization (`weight_decay=0.01`)
+- **Normalization:** StandardScaler (fit on train only)
+
+### Phase 2 — Planned (Deep Model)
+- Hidden layers with ReLU activation
+- BatchNormalization and/or Dropout
+- Adam optimizer
+- DataLoader with mini-batch training
+- Multiple architectures for comparison
+
+---
+
+## 📈 Results
+
+### Phase 1 — Baseline
+| | Train Accuracy | Test Accuracy |
+|---|---|---|
+| Without L2 | 54.25% | 49.50% |
+| With L2 | 54.37% | 51.00% |
+
+**Diagnosis: Underfitting** — model is too simple to learn meaningful patterns from this data.
+
+---
+
+## 🚧 Project Status
+
+**Phase 1 — Baseline Pipeline: Complete ✅**
+- Data loading, splitting, normalization
+- Logistic regression model
+- L2 regularization
+
+**Phase 2 — Improvement: In Progress 🚧**
+
+Planned work:
+- Fix stuck/fixed loss issue
+- Add `DataLoader` and mini-batch training
+- Check and handle class imbalance
+- Build deeper model with hidden layers
+- Add `BatchNorm` and/or `Dropout`
+- Compare multiple architectures
+
+---
+
+## 📜 Disclaimer
+This project is intended **strictly for educational and research purposes**.
